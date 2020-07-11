@@ -1,0 +1,22 @@
+Experiments
+I experimented with M=2, 4, 6, 8 for max_iter = 5, 10, 15, 20. The following table reports the classification accuracy.
++----------+---------+---------+---------+----+
+|          |         |         |         |    |
+| Max_iter | 5       | 10      | 15      | 20 |
+| M        |         |         |         |    |
++----------+---------+---------+---------+----+
+| 2        | 0.875   | 0.9375  | 0.96875 | 1  |
++----------+---------+---------+---------+----+
+| 4        | 0.96875 | 0.96875 | 1       | 1  |
++----------+---------+---------+---------+----+
+| 6        | 1       | 1       | 1       | 1  |
++----------+---------+---------+---------+----+
+| 8        | 1       | 1       | 1       | 1  |
++----------+---------+---------+---------+----+
+As the number of components decrease, classification accuracy decreases. Moreover, as the number of max iters increase, the classification accuracy increases.
+When the number of possible speakers decreases, the classification accuracy increases. 
+
+A) We can increase number of mixtures, run the model on several initializations and get the average prediction (so model doesnt get stuck in bad local optima)
+increase the number of max iter, have a validation set to tune hyperparameters, by not assuming that covariance matrix is diagonal.
+B) We can check our improvement, if improvement isn't increasing, then it could be that the data doesn't belong to any of the speakers. We could introduce a 'None of the above' speaker (garbage class).Moreover, we could choose a cutoff for log-likelihood and if it is too low at the end of the iteration, we classify it as none of the above
+C) We could try to use a HMMs over the words or use a mfcc with continous HMM. Or use a DNN - deep neural network instead.

@@ -1,0 +1,74 @@
+
+
+
+finished step1 python3.7 a2_run.py vocab $TRAIN e vocab.e.gz and python3.7 a2_run.py vocab $TRAIN f vocab.f.gz
+
+finished step2 python3.7 a2_run.py split $TRAIN train.txt.gz dev.txt.gz
+
+
+
+100% 2778/2778 [05:09<00:00,  8.84it/s]
+/content/a2_abcs.py:787: UserWarning: Beam search not finished by t=100. Halted
+  warnings.warn(f'Beam search not finished by t={t}. Halted')
+Epoch 1: loss=0.3597009479999542, BLEU=0.0
+100% 2778/2778 [05:10<00:00,  8.91it/s]
+Epoch 2: loss=0.0057175192050635815, BLEU=0.0
+100% 2778/2778 [05:09<00:00,  9.12it/s]
+Epoch 3: loss=0.0007262785220518708, BLEU=0.0
+100% 2778/2778 [05:09<00:00,  9.10it/s]
+Epoch 4: loss=0.00045525995665229857, BLEU=0.0
+100% 2778/2778 [05:09<00:00,  8.94it/s]
+Epoch 5: loss=0.00021575253049377352, BLEU=0.0
+Finished 5 epochs
+
+finished step3 python3.7 a2_run.py train $TRAIN \
+  vocab.e.gz vocab.f.gz \
+  train.txt.gz dev.txt.gz \
+  model_wo_att.pt.gz --device cuda
+
+
+
+100% 2778/2778 [06:38<00:00,  7.00it/s]
+/content/a2_abcs.py:787: UserWarning: Beam search not finished by t=100. Halted
+  warnings.warn(f'Beam search not finished by t={t}. Halted')
+Epoch 1: loss=0.4334527850151062, BLEU=0.0
+100% 2778/2778 [06:38<00:00,  6.87it/s]
+Epoch 2: loss=0.006113673094660044, BLEU=0.0
+100% 2778/2778 [06:37<00:00,  6.97it/s]
+Epoch 3: loss=0.00015634270675946027, BLEU=0.0
+100% 2778/2778 [06:38<00:00,  7.08it/s]
+Epoch 4: loss=0.0003572835121303797, BLEU=0.0
+100% 2778/2778 [06:37<00:00,  6.92it/s]
+Epoch 5: loss=0.000148095321492292, BLEU=0.0
+Finished 5 epochs
+finished step4 python3.7 a2_run.py train $TRAIN \
+  vocab.e.gz vocab.f.gz \
+  train.txt.gz dev.txt.gz \
+  model_w_att.pt.gz \
+  --with-attention --device cuda
+
+
+
+/content/a2_abcs.py:787: UserWarning: Beam search not finished by t=100. Halted
+  warnings.warn(f'Beam search not finished by t={t}. Halted')
+The average BLEU score over the test set was 0.0
+
+finished step5 python3.7 a2_run.py test $TEST \
+  vocab.e.gz vocab.f.gz model_wo_att.pt.gz --device cuda
+
+
+
+/content/a2_abcs.py:787: UserWarning: Beam search not finished by t=100. Halted
+  warnings.warn(f'Beam search not finished by t={t}. Halted')
+The average BLEU score over the test set was 0.0
+finished step6 python3.7 a2_run.py test $TEST \
+  vocab.e.gz vocab.f.gz model_w_att.pt.gz \
+  --with-attention --device cuda 
+
+
+We don't know if there is discrepancy in training and testing results based on output because BLEU = 0. There will be discrepancy if we had output because we used teacher forcing for training. This is because beam search did not finish in t = 100, so we couldn't get a 
+more informative output.The loss is decreasing while training both with attention and without attention but the model with attention has lower loss so its better. 
+If we knew about the bleu score, if the model with attention had higher bleu score during testing it would be better. 
+
+I used beam width 1, because I had not implemented update beam when I ran it. However, I have implemented it now but I don't have time to run. 
+
